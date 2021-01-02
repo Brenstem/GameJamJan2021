@@ -11,9 +11,14 @@ public class PlayerController : MonoBehaviour
     public PlayerJumpingState playerJumpingState;
     public PlayerFallingState playerFallingState;
 
-    public float runningForce;
+    public float runningMaxSpeed;
+    public float runningAccelerationSpeed;
 
-    public Rigidbody rb;
+    [HideInInspector] public Rigidbody rb;
+    [HideInInspector] public Vector3 targetVelocity;
+    [HideInInspector] public Vector3 zeroVector = Vector3.zero;
+
+    [Range(0, .3f)] public float playerMovementSmoothing = .05f;
 
     private void Awake()
     {
@@ -56,10 +61,13 @@ public class PlayerIdleState : State<PlayerController>
 
     public override void UpdateState(PlayerController owner)
     {
-        if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
         {
             owner.playerControllerStateMachine.ChangeState(owner.playerRunningState);
         }
+
+        //myRigidbody.velocity = Vector3.SmoothDamp(myRigidbody.velocity, Vector2.zero, ref velocity, movementSmoothing);
+        owner.rb.velocity = Vector3.SmoothDamp(owner.rb.velocity, Vector2.zero, ref owner.zeroVector, owner.playerMovementSmoothing);
     }
 }
 
@@ -85,7 +93,18 @@ public class PlayerRunningState : State<PlayerController>
 
         moveX = Input.GetAxis("Horizontal");
 
-        owner.rb.AddForce(new Vector3(moveX * owner.runningForce * Time.fixedDeltaTime, 0, 0));
+        owner.targetVelocity = new Vector2(moveX * owner.runningMaxSpeed, owner.rb.velocity.y);
+        owner.rb.velocity = Vector3.SmoothDamp(owner.rb.velocity, owner.targetVelocity, ref owner.zeroVector, owner.playerMovementSmoothing);
+
+
+        //Vector3 newVelocity = new Vector3(Mathf.Clamp(owner.rb.velocity.x + moveX * owner.runningAccelerationSpeed * Time.fixedDeltaTime, -owner.runningMaxSpeed, owner.runningMaxSpeed), 0, 0);
+
+        //newVelocity = Vector3.ClampMagnitude(newVelocity, owner.runningMaxSpeed);
+
+        //owner.rb.velocity = newVelocity;
+
+
+        Debug.Log(owner.rb.velocity);
     }
 }
 
