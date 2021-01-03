@@ -15,9 +15,8 @@ public class Checkpoint : MonoBehaviour
 	private void OnTriggerEnter(Collider other)
 	{
 		if (other.CompareTag("Player"))
-		{
             _gm._lastCheckPoint = transform.position;
-		}
-	}
-
+		else if (other.transform.parent.gameObject.CompareTag("Player"))
+            _gm._lastCheckPoint = transform.position;
+    }
 }
