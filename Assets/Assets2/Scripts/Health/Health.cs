@@ -19,7 +19,7 @@ public class Health : MonoBehaviour
     [SerializeField] public bool invulnerable;
 
     [HideInInspector] public bool isDead;
-    private float currentHealth;
+    //private float currentHealth;
 
     void Start()
     {
