@@ -5,6 +5,7 @@ using DanesUnityLibrary;
 
 public class PlayerController : MonoBehaviour
 {
+    #region State machine stuff
     public StateMachine<PlayerController> stateMachine;
 
     public PlayerIdleState playerIdleState;
@@ -13,6 +14,7 @@ public class PlayerController : MonoBehaviour
     public PlayerFallingState playerFallingState;
 
     public PlayerAttackingState playerAttackingState;
+    #endregion
 
     #region Attack Vars
     public GameObject attackHitboxObject;
@@ -38,6 +40,8 @@ public class PlayerController : MonoBehaviour
     public GameObject groundCheckObject;
     public float groundCheckRadius;
     public LayerMask groundLayerMask;
+
+    public float airborneWallDetectionDistance;
 
     public float jumpSpeed;
     public float jumpTime;
@@ -67,9 +71,14 @@ public class PlayerController : MonoBehaviour
     void Start()
     { }
 
-    void FixedUpdate()
+    private void Update()
     {
         stateMachine.Update();
+    }
+
+    void FixedUpdate()
+    {
+        stateMachine.FixedUpdate();
     }
 
     public void SlowDown()
@@ -80,8 +89,15 @@ public class PlayerController : MonoBehaviour
     public void AirStrafe()
     {
         moveX = Input.GetAxis("Horizontal");
-        targetVelocity = new Vector3(moveX * runningMaxSpeed, rb.velocity.y, 0f);
-        rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref zeroVector, playerMovementAirborneAccelerationSmoothing);
+
+        if (!Physics.Raycast(transform.position, Vector3.right * Mathf.Sign(moveX), airborneWallDetectionDistance, groundLayerMask))
+        {
+            targetVelocity = new Vector3(moveX * runningMaxSpeed, rb.velocity.y, 0f);
+            rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref zeroVector, playerMovementAirborneAccelerationSmoothing);
+        }
+
+        //targetVelocity = new Vector3(moveX * runningMaxSpeed, rb.velocity.y, 0f);
+        //rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref zeroVector, playerMovementAirborneAccelerationSmoothing);
 
         HandleYRotation();
 
@@ -91,13 +107,14 @@ public class PlayerController : MonoBehaviour
     public void HandleYRotation()
     {
         //spelarens rotation runt Y axeln
-        if (Mathf.Sign(moveX) < 0 && !lookingLeft)
+        if (moveX < 0 && !lookingLeft)
         {
             transform.rotation = Quaternion.Euler(0, 180, 0);
             lookingLeft = true;
         }
-        else if (Mathf.Sign(moveX) > 0 && lookingLeft)
+        else if (moveX  > 0 && lookingLeft)
         {
+            print("it flip");
             transform.rotation = Quaternion.Euler(0, 0, 0);
             lookingLeft = false;
         }
@@ -114,17 +131,23 @@ public class PlayerIdleState : State<PlayerController>
 {
     public override void EnterState(PlayerController owner)
     {
-        //Debug.Log("idle");
+        Debug.Log("idle");
+        //Debug.Break();
     }
 
     public override void ExitState(PlayerController owner)
     { }
 
+    public override void FixedUpdateState(PlayerController owner)
+    {
+        owner.SlowDown();
+    }
+
     public override void UpdateState(PlayerController owner)
     {
         #region State transition checks
         Collider[] groundCol = Physics.OverlapSphere(owner.groundCheckObject.transform.position, owner.groundCheckRadius, owner.groundLayerMask);
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             owner.stateMachine.ChangeState(owner.playerJumpingState);
         }
@@ -136,13 +159,11 @@ public class PlayerIdleState : State<PlayerController>
         {
             owner.stateMachine.ChangeState(owner.playerRunningState);
         }
-        else if (Input.GetKey(KeyCode.Mouse0))
+        else if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             owner.stateMachine.ChangeState(owner.playerAttackingState);
         }
         #endregion
-
-        owner.SlowDown();
     }
 }
 
@@ -150,34 +171,14 @@ public class PlayerRunningState : State<PlayerController>
 {
     public override void EnterState(PlayerController owner)
     {
-        //Debug.Log("shmoovin");
+        Debug.Log("shmoovin");
     }
 
     public override void ExitState(PlayerController owner)
     { }
 
-    public override void UpdateState(PlayerController owner)
+    public override void FixedUpdateState(PlayerController owner)
     {
-        #region State transition checks
-        Collider[] groundCol = Physics.OverlapSphere(owner.groundCheckObject.transform.position, owner.groundCheckRadius, owner.groundLayerMask);
-        if (Input.GetKey(KeyCode.Space))
-        {
-            owner.stateMachine.ChangeState(owner.playerJumpingState);
-        }
-        else if (groundCol.Length == 0)
-        {
-            owner.stateMachine.ChangeState(owner.playerFallingState);
-        }
-        else if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
-        {
-            owner.stateMachine.ChangeState(owner.playerIdleState);
-        }
-        else if (Input.GetKey(KeyCode.Mouse0))
-        {
-            owner.stateMachine.ChangeState(owner.playerAttackingState);
-        }
-        #endregion
-
         #region Movement
         owner.moveX = Input.GetAxis("Horizontal");
         owner.targetVelocity = new Vector3(owner.moveX * owner.runningMaxSpeed, 0f, 0f);
@@ -189,13 +190,36 @@ public class PlayerRunningState : State<PlayerController>
             Debug.LogError(hit.collider.gameObject.name + " has a Y and/or X rotation thats not 0, make it 0 :)");
 
         float angualDifferenc = Vector3.SignedAngle(hit.normal, Vector3.up, Vector3.forward);
-        owner.targetVelocity = Quaternion.Euler(0f, 0f, -angualDifferenc /** Mathf.Sign(owner.moveX)*/) * owner.targetVelocity;
+        owner.targetVelocity = Quaternion.Euler(0f, 0f, -angualDifferenc) * owner.targetVelocity;
         //Debug.DrawRay(owner.transform.position, owner.targetVelocity, Color.green);
 
         owner.rb.velocity = Vector3.SmoothDamp(owner.rb.velocity, owner.targetVelocity, ref owner.zeroVector, owner.playerMovementGroundedAccelerationSmoothing);
         #endregion
 
         owner.HandleYRotation();
+    }
+
+    public override void UpdateState(PlayerController owner)
+    {
+        #region State transition checks
+        Collider[] groundCol = Physics.OverlapSphere(owner.groundCheckObject.transform.position, owner.groundCheckRadius, owner.groundLayerMask);
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            owner.stateMachine.ChangeState(owner.playerJumpingState);
+        }
+        else if (groundCol.Length == 0)
+        {
+            owner.stateMachine.ChangeState(owner.playerFallingState);
+        }
+        else if (Input.GetKeyUp(KeyCode.A) && Input.GetKeyUp(KeyCode.D))
+        {
+            owner.stateMachine.ChangeState(owner.playerIdleState);
+        }
+        else if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            owner.stateMachine.ChangeState(owner.playerAttackingState);
+        }
+        #endregion
     }
 }
 
@@ -205,34 +229,36 @@ public class PlayerJumpingState : State<PlayerController>
 
     public override void EnterState(PlayerController owner)
     {
-        //Debug.Log("jumbi");
+        Debug.Log("jumbi");
         jumpTimer = new Timer(owner.jumpTime);
     }
 
     public override void ExitState(PlayerController owner)
     { }
 
+    public override void FixedUpdateState(PlayerController owner)
+    {
+        owner.AirStrafe();
+
+        //jump
+        owner.rb.velocity = new Vector3(owner.rb.velocity.x, owner.jumpSpeed, 0);
+    }
+
     public override void UpdateState(PlayerController owner)
     {
-
         #region State transition checks
-        jumpTimer.UpdateTimer(Time.fixedDeltaTime);
+        jumpTimer.UpdateTimer(Time.deltaTime);
         //Collider[] groundCol = Physics.OverlapSphere(owner.groundCheckObject.transform.position, owner.groundCheckRadius, owner.groundLayerMask);
         //if (groundCol.Length >= 1)
         //{
         //    owner.playerControllerStateMachine.ChangeState(owner.playerIdleState);
         //}
         /*else*/
-        if (jumpTimer.Expired || !Input.GetKey(KeyCode.Space))
+        if (jumpTimer.Expired || Input.GetKeyUp(KeyCode.Space))
         {
             owner.stateMachine.ChangeState(owner.playerFallingState);
         }
         #endregion
-
-        owner.AirStrafe();
-
-        //jump
-        owner.rb.velocity = new Vector3(owner.rb.velocity.x, owner.jumpSpeed, 0);
     }
 }
 
@@ -247,6 +273,16 @@ public class PlayerFallingState : State<PlayerController>
     public override void ExitState(PlayerController owner)
     { }
 
+    public override void FixedUpdateState(PlayerController owner)
+    {
+        owner.AirStrafe();
+
+        #region Gravity
+        owner.rb.velocity += new Vector3(0, -owner.gravityScale, 0);
+        owner.rb.velocity = new Vector3(owner.rb.velocity.x, Mathf.Clamp(owner.rb.velocity.y, -owner.terminalVelocity, Mathf.Infinity), 0);
+        #endregion
+    }
+
     public override void UpdateState(PlayerController owner)
     {
         #region State transition checks
@@ -256,14 +292,6 @@ public class PlayerFallingState : State<PlayerController>
             owner.stateMachine.ChangeState(owner.playerIdleState);
         }
         #endregion
-
-        owner.AirStrafe();
-
-        #region Gravity
-        owner.rb.velocity += new Vector3(0, -owner.gravityScale, 0);
-        owner.rb.velocity = new Vector3(owner.rb.velocity.x, Mathf.Clamp(owner.rb.velocity.y, -owner.terminalVelocity, Mathf.Infinity), 0);
-        #endregion
-
     }
 }
 
@@ -282,17 +310,20 @@ public class PlayerAttackingState : State<PlayerController>
     public override void ExitState(PlayerController owner)
     { }
 
+    public override void FixedUpdateState(PlayerController owner)
+    { 
+        owner.SlowDown();
+    }
+
     public override void UpdateState(PlayerController owner)
     {
         #region State transition checks
-        timer.UpdateTimer(Time.fixedDeltaTime);
+        timer.UpdateTimer(Time.deltaTime);
         if (timer.Expired)
         {
             owner.stateMachine.ChangeState(owner.playerIdleState);
         }
         #endregion
-
-        owner.SlowDown();
     }
 
     IEnumerator HitBoxActivationDelay(PlayerController owner)

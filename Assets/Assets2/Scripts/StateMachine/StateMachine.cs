@@ -56,4 +56,11 @@ public class StateMachine<T>
         if (currentState != null)
             currentState.UpdateState(owner);
     }
+    /// <summary>
+    /// Updates the current state when useing FixedUppdate
+    /// </summary>
+    public void FixedUpdate() {
+        if (currentState != null)
+            currentState.FixedUpdateState(owner);
+    }
 }
