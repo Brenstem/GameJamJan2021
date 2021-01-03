@@ -7,6 +7,7 @@ public class HitBoxController : MonoBehaviour
 {
     [Header("Hitbox Settings")]
     [SerializeField] private float damage;
+    [SerializeField] private Debuffs debuff;
     [SerializeField] private float lifeTime;
     [SerializeField] private Vector3 hitBoxExtents;
     [SerializeField] private LayerMask targetLayer;
@@ -32,13 +33,13 @@ public class HitBoxController : MonoBehaviour
             if (debug)
                 showHitBox = true;
 
-            Collider[] hits = Physics.OverlapBox(transform.position, hitBoxExtents);
+            Collider[] hits = Physics.OverlapBox(transform.position, hitBoxExtents, Quaternion.identity, targetLayer);
 
             foreach (Collider col in hits)
             {
                 if (col.GetComponent<Health>() == true)
                 {
-                    col.GetComponent<Health>().Damage(damage);
+                    col.GetComponent<Health>().Damage(damage, debuff);
                     doneDamage = true;
                 }
             }

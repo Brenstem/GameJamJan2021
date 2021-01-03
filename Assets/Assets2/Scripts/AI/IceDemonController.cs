@@ -2,12 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using DanesUnityLibrary;
 
 public class IceDemonController : MonoBehaviour
 {
-    [SerializeField] public Transform player;
+    [Header("Ranges")]
     [SerializeField] public float aggroRange;
     [SerializeField] public float attackRange;
+
+    [Header("Blow attack")]
+    [SerializeField] private GameObject blowHitBox;
+    [SerializeField] public float blowCooldown;
+    [HideInInspector] public HitBoxController blowHitBoxController { get; private set; }
+
+    [Header("Shield")]
+
+    [Header("References and debug")]
+    [SerializeField] public Transform player;
     [SerializeField] private bool debug;
 
     [HideInInspector] public NavMeshAgent navigation { get; private set; }
@@ -32,6 +43,8 @@ public class IceDemonController : MonoBehaviour
         navigation = GetComponent<NavMeshAgent>();
         stateMachine.ChangeState(idleState);
 
+        blowHitBoxController = blowHitBox.GetComponent<HitBoxController>();
+
         if (player == null)
         {
             player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -40,6 +53,8 @@ public class IceDemonController : MonoBehaviour
 
     void Update()
     {
+        // GetComponent<Health>().TookDamage += OnDamaged;
+
         stateMachine.Update();
 
         if (debug)
@@ -103,6 +118,40 @@ public class IceDemonMove : State<IceDemonController>
     }
 }
 
+public class IceDemonAttack : State<IceDemonController>
+{
+    private Timer attackTimer;
+
+    public override void EnterState(IceDemonController owner)
+    {
+        Debug.Log("Attack!");
+        owner.blowHitBoxController.ExposeHitBox();
+        attackTimer = new Timer(owner.blowCooldown);
+    }
+
+    public override void ExitState(IceDemonController owner)
+    {
+        attackTimer.Reset();
+
+    }
+
+    public override void UpdateState(IceDemonController owner)
+    {
+        attackTimer.UpdateTimer(Time.deltaTime);
+
+        if (Vector3.Distance(owner.transform.position, owner.player.position) > owner.attackRange)
+        {
+            owner.stateMachine.ChangeState(owner.movementState);
+        }
+        else if (attackTimer.Expired)
+        {
+            Debug.Log("Attack!");
+            owner.blowHitBoxController.ExposeHitBox();
+            attackTimer.Reset();
+        }
+    }
+}
+
 public class IceDemonShield : State<IceDemonController>
 {
     public override void EnterState(IceDemonController owner)
@@ -119,23 +168,3 @@ public class IceDemonShield : State<IceDemonController>
     }
 }
 
-public class IceDemonAttack : State<IceDemonController>
-{
-    public override void EnterState(IceDemonController owner)
-    {
-        Debug.Log("Attack!");
-    }
-
-    public override void ExitState(IceDemonController owner)
-    {
-
-    }
-
-    public override void UpdateState(IceDemonController owner)
-    {
-        if (Vector3.Distance(owner.transform.position, owner.player.position) > owner.attackRange)
-        {
-            owner.stateMachine.ChangeState(owner.movementState);
-        }
-    }
-}

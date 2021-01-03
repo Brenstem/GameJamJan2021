@@ -1,25 +1,41 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum Debuffs 
+{
+    none,
+    slow, 
+}
+
 public class Health : MonoBehaviour
 {
-    [SerializeField] private float startingHealth;
+    public delegate void OnDamaged(Debuffs debuff);
+    public event OnDamaged TookDamage;
 
-    private float currentHealth;
+    [SerializeField] private float startingHealth;
+    [SerializeField] public bool invulnerable;
+
+    public float currentHealth;
 
     void Start()
     {
         currentHealth = startingHealth;
     }
 
-    public void Damage(float damageVal)
+    public void Damage(float damageVal, Debuffs debuff = Debuffs.none)
     {
-        currentHealth -= damageVal;
-
-        if (currentHealth <= 0)
+        if (!invulnerable)
         {
-            Die();
+            TookDamage?.Invoke(debuff);
+
+            currentHealth -= damageVal;
+
+            if (currentHealth <= 0)
+            {
+                Die();
+            }
         }
     }
 
