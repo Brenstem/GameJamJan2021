@@ -29,8 +29,11 @@ public class Health : MonoBehaviour
     {
         isDead = false;
         currentHealth = startingHealth;
-        healthbar.maxValue = startingHealth;
-        healthbar.value = currentHealth;
+        if (healthbar != null)
+        {
+            healthbar.maxValue = startingHealth;
+            healthbar.value = currentHealth;
+        }
     }
 
     public void Damage(float damageVal, Debuffs debuff = Debuffs.none)
@@ -42,11 +45,12 @@ public class Health : MonoBehaviour
             Instantiate(hurtParticle, transform.position, transform.rotation);
 
             currentHealth -= damageVal;
-            healthbar.value = currentHealth;
+
+            if (healthbar != null)
+                healthbar.value = currentHealth;
+
             if (currentHealth <= 0)
-            {
                 Die();
-            }
         }
     }
 
