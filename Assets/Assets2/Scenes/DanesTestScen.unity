@@ -1868,11 +1868,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 924316912766652969, guid: 36d092eff09a1a8488472d5c2e3b82c1, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 924316912766653012, guid: 36d092eff09a1a8488472d5c2e3b82c1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.31
+      value: -2.51
       objectReference: {fileID: 0}
     - target: {fileID: 924316912766653012, guid: 36d092eff09a1a8488472d5c2e3b82c1, type: 3}
       propertyPath: m_LocalPosition.y
@@ -8786,6 +8786,67 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 632232376}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1001 &634068336
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 266187170540609879, guid: ed91f92042e558b4d9364db790dc466c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -21
+      objectReference: {fileID: 0}
+    - target: {fileID: 266187170540609879, guid: ed91f92042e558b4d9364db790dc466c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 9.89
+      objectReference: {fileID: 0}
+    - target: {fileID: 266187170540609879, guid: ed91f92042e558b4d9364db790dc466c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -20.49
+      objectReference: {fileID: 0}
+    - target: {fileID: 266187170540609879, guid: ed91f92042e558b4d9364db790dc466c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.13123755
+      objectReference: {fileID: 0}
+    - target: {fileID: 266187170540609879, guid: ed91f92042e558b4d9364db790dc466c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.0745341
+      objectReference: {fileID: 0}
+    - target: {fileID: 266187170540609879, guid: ed91f92042e558b4d9364db790dc466c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.030617775
+      objectReference: {fileID: 0}
+    - target: {fileID: 266187170540609879, guid: ed91f92042e558b4d9364db790dc466c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9880709
+      objectReference: {fileID: 0}
+    - target: {fileID: 266187170540609879, guid: ed91f92042e558b4d9364db790dc466c, type: 3}
+      propertyPath: m_RootOrder
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 266187170540609879, guid: ed91f92042e558b4d9364db790dc466c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 15.302
+      objectReference: {fileID: 0}
+    - target: {fileID: 266187170540609879, guid: ed91f92042e558b4d9364db790dc466c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 8.301
+      objectReference: {fileID: 0}
+    - target: {fileID: 266187170540609879, guid: ed91f92042e558b4d9364db790dc466c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -2.433
+      objectReference: {fileID: 0}
+    - target: {fileID: 266187170540609882, guid: ed91f92042e558b4d9364db790dc466c, type: 3}
+      propertyPath: m_Name
+      value: Main Camera
+      objectReference: {fileID: 0}
+    - target: {fileID: 266187170540609883, guid: ed91f92042e558b4d9364db790dc466c, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1930478147}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ed91f92042e558b4d9364db790dc466c, type: 3}
 --- !u!1 &638257739
 GameObject:
   m_ObjectHideFlags: 0
@@ -28502,6 +28563,11 @@ PrefabInstance:
       objectReference: {fileID: 1782388007}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cea73cd5cfd3d004a9eff797da588221, type: 3}
+--- !u!1 &1930478147 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1743918065020487825, guid: cea73cd5cfd3d004a9eff797da588221, type: 3}
+  m_PrefabInstance: {fileID: 1930478146}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1934761435
 GameObject:
   m_ObjectHideFlags: 0
@@ -32335,6 +32401,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Plague Demon
       objectReference: {fileID: 0}
+    - target: {fileID: 3760237465069630470, guid: e60030a3547b14d49a93c79dc7158f85, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3760237465069630472, guid: e60030a3547b14d49a93c79dc7158f85, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.62
@@ -32495,7 +32565,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5169855263580736079, guid: 2b6bd91d3988b1a468d22528d7151fac, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5169855263580736079, guid: 2b6bd91d3988b1a468d22528d7151fac, type: 3}
       propertyPath: m_Name

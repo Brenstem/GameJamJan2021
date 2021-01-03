@@ -104,8 +104,6 @@ public class PlagueFrogMove : State<PlagueFrogController>
     {
         owner.navigation.SetDestination(new Vector3(owner.player.position.x, 0));
 
-        Debug.Log(owner.navigation.destination);
-
         if (Vector3.Distance(owner.transform.position, owner.player.position) < owner.attackRange)
         {
             owner.stateMachine.ChangeState(owner.attackState);
