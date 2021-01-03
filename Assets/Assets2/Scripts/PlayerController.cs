@@ -107,13 +107,14 @@ public class PlayerController : MonoBehaviour
     public void HandleYRotation()
     {
         //spelarens rotation runt Y axeln
-        if (Mathf.Sign(moveX) < 0 && !lookingLeft)
+        if (moveX < 0 && !lookingLeft)
         {
             transform.rotation = Quaternion.Euler(0, 180, 0);
             lookingLeft = true;
         }
-        else if (Mathf.Sign(moveX) > 0 && lookingLeft)
+        else if (moveX  > 0 && lookingLeft)
         {
+            print("it flip");
             transform.rotation = Quaternion.Euler(0, 0, 0);
             lookingLeft = false;
         }
@@ -189,7 +190,7 @@ public class PlayerRunningState : State<PlayerController>
             Debug.LogError(hit.collider.gameObject.name + " has a Y and/or X rotation thats not 0, make it 0 :)");
 
         float angualDifferenc = Vector3.SignedAngle(hit.normal, Vector3.up, Vector3.forward);
-        owner.targetVelocity = Quaternion.Euler(0f, 0f, -angualDifferenc /** Mathf.Sign(owner.moveX)*/) * owner.targetVelocity;
+        owner.targetVelocity = Quaternion.Euler(0f, 0f, -angualDifferenc) * owner.targetVelocity;
         //Debug.DrawRay(owner.transform.position, owner.targetVelocity, Color.green);
 
         owner.rb.velocity = Vector3.SmoothDamp(owner.rb.velocity, owner.targetVelocity, ref owner.zeroVector, owner.playerMovementGroundedAccelerationSmoothing);
