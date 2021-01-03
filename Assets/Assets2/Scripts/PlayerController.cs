@@ -166,12 +166,12 @@ public class PlayerRunningState : State<PlayerController>
 
         float angualDifferenc = Vector3.SignedAngle(hit.normal, Vector3.up, Vector3.forward);
         
-        Debug.Log(angualDifferenc);
+        //Debug.Log(angualDifferenc);
 
         //owner.targetVelocity = Quaternion.AngleAxis(angualDifferenc /** Mathf.Sign(owner.moveX)*/, Vector3.forward) * owner.targetVelocity;
         owner.targetVelocity = Quaternion.Euler(0f, 0f, -angualDifferenc /** Mathf.Sign(owner.moveX)*/) * owner.targetVelocity;
 
-        Debug.Log(owner.targetVelocity);
+        //Debug.Log(owner.targetVelocity);
 
         Debug.DrawRay(owner.transform.position, owner.targetVelocity, Color.green);
 
@@ -229,7 +229,7 @@ public class PlayerFallingState : State<PlayerController>
 
     public override void EnterState(PlayerController owner)
     {
-        Debug.LogWarning("-----------------falling-----------------");
+        //Debug.LogWarning("-----------------falling-----------------");
         //Debug.Log("falling");
     }
 
