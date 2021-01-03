@@ -141,7 +141,7 @@ public class BloodDemonAttack : State<BloodDemonController>
         {
             owner.navigation.enabled = false;
             newVector = owner.player.position - owner.transform.position;
-            owner.GetComponent<Rigidbody>().AddForce(-newVector * owner.dashMultiplyer); //den börjar använda gravity eftersom den inte ska snappa ner
+            owner.GetComponent<Rigidbody>().AddForce(new Vector3(-newVector.x * owner.dashMultiplyer, -newVector.y * owner.dashMultiplyer, 0)); //den börjar använda gravity eftersom den inte ska snappa ner
 			if (dashTimer2.Expired)
 			{
                 owner.GetComponent<Rigidbody>().useGravity = true;

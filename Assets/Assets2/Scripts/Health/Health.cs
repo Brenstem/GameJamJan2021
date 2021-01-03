@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum Debuffs 
 {
@@ -17,6 +18,7 @@ public class Health : MonoBehaviour
     [SerializeField] private float startingHealth;
     [SerializeField] private float currentHealth;
     [SerializeField] public bool invulnerable;
+    [SerializeField] private Slider healthbar;
 
     [SerializeField] private GameObject hurtParticle;
 
@@ -27,6 +29,8 @@ public class Health : MonoBehaviour
     {
         isDead = false;
         currentHealth = startingHealth;
+        healthbar.maxValue = startingHealth;
+        healthbar.value = currentHealth;
     }
 
     public void Damage(float damageVal, Debuffs debuff = Debuffs.none)
@@ -38,7 +42,7 @@ public class Health : MonoBehaviour
             Instantiate(hurtParticle, transform.position, transform.rotation);
 
             currentHealth -= damageVal;
-
+            healthbar.value = currentHealth;
             if (currentHealth <= 0)
             {
                 Die();

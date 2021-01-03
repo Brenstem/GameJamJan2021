@@ -16,7 +16,8 @@ public class Checkpoint : MonoBehaviour
 	{
 		if (other.CompareTag("Player"))
             _gm._lastCheckPoint = transform.position;
-		else if (other.transform.parent.gameObject.CompareTag("Player"))
-            _gm._lastCheckPoint = transform.position;
+		else if (other.transform.parent != null)
+			if (other.transform.parent.gameObject.CompareTag("Player"))
+                _gm._lastCheckPoint = transform.position;
     }
 }
