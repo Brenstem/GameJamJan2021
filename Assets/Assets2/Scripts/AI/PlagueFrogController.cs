@@ -14,6 +14,7 @@ public class PlagueFrogController : MonoBehaviour
     [Header("References and debug")]
     [SerializeField] private bool debug;
     [SerializeField] public Transform player;
+    public Animator animator;
 
     [Header("Attack")]
     [SerializeField] private GameObject biteHitBox;
@@ -41,6 +42,7 @@ public class PlagueFrogController : MonoBehaviour
     {
         biteHitBoxController = biteHitBox.GetComponent<HitBoxController>();
         navigation = GetComponent<NavMeshAgent>();
+        animator = GetComponentInChildren<Animator>();
         stateMachine.ChangeState(idleState);
 
         if (player == null)
@@ -93,11 +95,13 @@ public class PlagueFrogMove : State<PlagueFrogController>
 {
     public override void EnterState(PlagueFrogController owner)
     {
+        owner.animator.SetBool("Running", true);
         owner.navigation.SetDestination(new Vector3(owner.player.position.x, 0));
     }
 
     public override void ExitState(PlagueFrogController owner)
     {
+        owner.animator.SetBool("Running", false);
     }
 
     public override void UpdateState(PlagueFrogController owner)

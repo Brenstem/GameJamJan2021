@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: 1f95fc4641dc53349b6262839d8351f5
+guid: ea6affe960158424699c230e2544aabf
 ModelImporter:
   serializedVersion: 20101
   internalIDToNameTable:
   - first:
-      74: 3149782882617189759
-    second: Froggy_Idle_Animation
+      74: -3214226751987671431
+    second: Mc_Idle_animation
   externalObjects: {}
   materials:
     materialImportMode: 1

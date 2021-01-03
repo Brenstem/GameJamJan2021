@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: 59c2083256413f44bb426ee9c635c56b
+guid: 03b5f6d00fa43554e9f4669e9beabeb9
 ModelImporter:
   serializedVersion: 20101
   internalIDToNameTable:
   - first:
-      74: -3214226751987671431
-    second: Mc_Idle_animation
+      74: 5459275804257022557
+    second: Mc_run animation
   externalObjects: {}
   materials:
     materialImportMode: 1

@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: 05c19d58dd763ad48875939e80cf25bb
+guid: 1ec0ad267971be44cae913806e2f43df
 ModelImporter:
   serializedVersion: 20101
   internalIDToNameTable:
   - first:
-      74: 5459275804257022557
-    second: Mc_run animation
+      74: -8951371472413673303
+    second: mc_punch_animation
   externalObjects: {}
   materials:
     materialImportMode: 1
