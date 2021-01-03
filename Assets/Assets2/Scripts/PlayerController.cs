@@ -50,6 +50,8 @@ public class PlayerController : MonoBehaviour
     public float terminalVelocity;
     #endregion
 
+    public Animator animator;
+
     private void Awake()
     {
         stateMachine = new StateMachine<PlayerController>(this);
@@ -62,14 +64,10 @@ public class PlayerController : MonoBehaviour
 
         stateMachine.ChangeState(playerIdleState);
 
-
         rb = GetComponent<Rigidbody>();
 
         attackHitboxScript = attackHitboxObject.GetComponent<HitBoxController>();
     }
-
-    void Start()
-    { }
 
     private void Update()
     {
@@ -172,10 +170,13 @@ public class PlayerRunningState : State<PlayerController>
     public override void EnterState(PlayerController owner)
     {
         Debug.Log("shmoovin");
+        owner.animator.SetBool("Running", true);
     }
 
     public override void ExitState(PlayerController owner)
-    { }
+    {
+        owner.animator.SetBool("Running", false);
+    }
 
     public override void FixedUpdateState(PlayerController owner)
     {
@@ -211,7 +212,7 @@ public class PlayerRunningState : State<PlayerController>
         {
             owner.stateMachine.ChangeState(owner.playerFallingState);
         }
-        else if (Input.GetKeyUp(KeyCode.A) && Input.GetKeyUp(KeyCode.D))
+        else if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
         {
             owner.stateMachine.ChangeState(owner.playerIdleState);
         }
