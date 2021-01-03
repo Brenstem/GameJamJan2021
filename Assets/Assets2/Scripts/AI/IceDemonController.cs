@@ -16,11 +16,14 @@ public class IceDemonController : MonoBehaviour
     [HideInInspector] public HitBoxController blowHitBoxController { get; private set; }
 
     [Header("Shield")]
+    [SerializeField] [Range(0, 1f)] private float shieldChance;
+    [SerializeField] public float shieldModeDuration;
 
     [Header("References and debug")]
     [SerializeField] public Transform player;
     [SerializeField] private bool debug;
 
+    [HideInInspector] public Health health { get; private set; }
     [HideInInspector] public NavMeshAgent navigation { get; private set; }
 
     [HideInInspector] public StateMachine<IceDemonController> stateMachine { get; private set; }
@@ -41,6 +44,7 @@ public class IceDemonController : MonoBehaviour
     private void Start()
     {
         navigation = GetComponent<NavMeshAgent>();
+        health = GetComponent<Health>();
         stateMachine.ChangeState(idleState);
 
         blowHitBoxController = blowHitBox.GetComponent<HitBoxController>();
@@ -53,7 +57,7 @@ public class IceDemonController : MonoBehaviour
 
     void Update()
     {
-        // GetComponent<Health>().TookDamage += OnDamaged;
+        health.TookDamage += ActivateShield;
 
         stateMachine.Update();
 
@@ -70,6 +74,14 @@ public class IceDemonController : MonoBehaviour
 
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(transform.position, aggroRange);
+        }
+    }
+
+    public void ActivateShield(Debuffs debuff)
+    {
+        if (Random.Range(0, 1f) > shieldChance)
+        {
+            stateMachine.ChangeState(shieldState);
         }
     }
 }
@@ -154,17 +166,31 @@ public class IceDemonAttack : State<IceDemonController>
 
 public class IceDemonShield : State<IceDemonController>
 {
+    private Timer shieldDurationTimer;
+
     public override void EnterState(IceDemonController owner)
     {
+        shieldDurationTimer = new Timer(owner.shieldModeDuration);
+
         Debug.Log("Shield!");
+        owner.health.invulnerable = true;
     }
 
     public override void ExitState(IceDemonController owner)
     {
+        owner.health.invulnerable = false;
     }
 
     public override void UpdateState(IceDemonController owner)
     {
+        shieldDurationTimer.UpdateTimer(Time.deltaTime);
+
+        owner.navigation.SetDestination(owner.transform.position);
+
+        if (shieldDurationTimer.Expired)
+        {
+            owner.stateMachine.ChangeState(owner.stateMachine.previousState);
+        }
     }
 }
 

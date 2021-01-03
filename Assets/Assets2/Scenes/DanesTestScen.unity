@@ -276,8 +276,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingHealth: 100
-  invulnerable: 0
   currentHealth: 0
+  invulnerable: 0
 --- !u!1 &177311044
 GameObject:
   m_ObjectHideFlags: 0
@@ -392,8 +392,25 @@ MonoBehaviour:
   attackRange: 10
   blowHitBox: {fileID: 1689553752}
   blowCooldown: 2
+  shieldChance: 1
+  shieldModeDuration: 2
   player: {fileID: 67119646}
   debug: 1
+--- !u!114 &431473346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 431473344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edbf246d0b9a7294a8dd231779dbf7b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startingHealth: 50
+  currentHealth: 0
+  invulnerable: 0
 --- !u!4 &431473349 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5169855263580736085, guid: 2b6bd91d3988b1a468d22528d7151fac, type: 3}
@@ -460,7 +477,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5169855263580736079, guid: 2b6bd91d3988b1a468d22528d7151fac, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5169855263580736081, guid: 2b6bd91d3988b1a468d22528d7151fac, type: 3}
       propertyPath: player
@@ -526,7 +543,8 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1.963
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3352386306570550243, guid: 2b6bd91d3988b1a468d22528d7151fac, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 2b6bd91d3988b1a468d22528d7151fac, type: 3}
 --- !u!850595691 &1042493522
 LightingSettings:
@@ -1052,11 +1070,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7166069421539419395, guid: 67e544fe51391df4ebf15fc99a6a84fc, type: 3}
       propertyPath: debug
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7166069421539419395, guid: 67e544fe51391df4ebf15fc99a6a84fc, type: 3}
       propertyPath: showHitBox
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7166069421539419395, guid: 67e544fe51391df4ebf15fc99a6a84fc, type: 3}
       propertyPath: hitBoxExtents.z
@@ -1325,7 +1343,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 924316912766652969, guid: 36d092eff09a1a8488472d5c2e3b82c1, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 924316912766653012, guid: 36d092eff09a1a8488472d5c2e3b82c1, type: 3}
       propertyPath: m_LocalPosition.x

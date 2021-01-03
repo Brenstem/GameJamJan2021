@@ -15,9 +15,8 @@ public class Health : MonoBehaviour
     public event OnDamaged TookDamage;
 
     [SerializeField] private float startingHealth;
+    [SerializeField] private float currentHealth;
     [SerializeField] public bool invulnerable;
-
-    public float currentHealth;
 
     void Start()
     {
