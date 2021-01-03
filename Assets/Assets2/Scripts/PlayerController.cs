@@ -67,7 +67,7 @@ public class PlayerIdleState : State<PlayerController>
 {
     public override void EnterState(PlayerController owner)
     {
-        Debug.Log("idle");
+        // Debug.Log("idle");
     }
 
     public override void ExitState(PlayerController owner)
@@ -105,7 +105,7 @@ public class PlayerRunningState : State<PlayerController>
     float moveX;
     public override void EnterState(PlayerController owner)
     {
-        Debug.Log("shmoovin");
+       // Debug.Log("shmoovin");
     }
 
     public override void ExitState(PlayerController owner)
@@ -138,7 +138,7 @@ public class PlayerRunningState : State<PlayerController>
         //newVelocity = Vector3.ClampMagnitude(newVelocity, owner.runningMaxSpeed);
         //owner.rb.velocity = newVelocity;
 
-        Debug.Log(owner.rb.velocity);
+        // Debug.Log(owner.rb.velocity);
     }
 }
 
@@ -149,7 +149,7 @@ public class PlayerJumpingState : State<PlayerController>
 
     public override void EnterState(PlayerController owner)
     {
-        Debug.Log("jumbi");
+        // Debug.Log("jumbi");
         jumpTimer = new Timer(owner.jumpTime);
     }
 

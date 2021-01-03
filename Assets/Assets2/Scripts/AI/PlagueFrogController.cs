@@ -102,6 +102,8 @@ public class PlagueFrogMove : State<PlagueFrogController>
 
     public override void UpdateState(PlagueFrogController owner)
     {
+        owner.navigation.SetDestination(owner.player.position);
+
         if (Vector3.Distance(owner.transform.position, owner.player.position) < owner.attackRange)
         {
             owner.stateMachine.ChangeState(owner.attackState);

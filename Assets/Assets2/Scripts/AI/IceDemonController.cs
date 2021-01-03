@@ -61,6 +61,11 @@ public class IceDemonController : MonoBehaviour
 
         stateMachine.Update();
 
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+
+        }
+
         if (debug)
             print(stateMachine.currentState);
     }
