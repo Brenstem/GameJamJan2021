@@ -116,10 +116,10 @@ public class PlagueDemonMove : State<PlagueDemonController>
             if (spawnFrogsTimer.Expired)
                 owner.stateMachine.ChangeState(owner.spawnAttack);
         }
-        /*else if (Vector3.Distance(owner.transform.position, owner.player.position) >)
+        else if (Vector3.Distance(owner.transform.position, owner.player.position) > owner.aggroRange)
         {
-
-        }*/
+            owner.stateMachine.ChangeState(owner.idleState);
+        }
     }
 }
 

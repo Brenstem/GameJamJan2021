@@ -29,6 +29,7 @@ public class Health : MonoBehaviour
     {
         isDead = false;
         currentHealth = startingHealth;
+
         if (healthbar != null)
         {
             healthbar.maxValue = startingHealth;

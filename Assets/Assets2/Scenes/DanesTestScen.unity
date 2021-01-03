@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 2035111234}
-  m_IndirectSpecularColor: {r: 130.96178, g: 162.2124, b: 214.64185, a: 1}
+  m_IndirectSpecularColor: {r: 130.978, g: 162.19281, b: 214.52872, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -25687,43 +25687,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1729023865}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1733070233 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3760237465069630470, guid: e60030a3547b14d49a93c79dc7158f85, type: 3}
-  m_PrefabInstance: {fileID: 3760237465134370723}
-  m_PrefabAsset: {fileID: 0}
---- !u!136 &1733070234
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1733070233}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1733070235
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1733070233}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: edbf246d0b9a7294a8dd231779dbf7b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startingHealth: 150
-  currentHealth: 0
-  invulnerable: 0
-  healthbar: {fileID: 0}
-  hurtParticle: {fileID: 5688848039972580233, guid: 7451640a8924c934e819bec55a9d2ea2, type: 3}
-  isDead: 0
 --- !u!1 &1736302721
 GameObject:
   m_ObjectHideFlags: 0
@@ -32364,45 +32327,13 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 674271040, guid: e60030a3547b14d49a93c79dc7158f85, type: 3}
-      propertyPath: m_Layer
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 661177478685527895, guid: e60030a3547b14d49a93c79dc7158f85, type: 3}
-      propertyPath: m_Layer
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 3760237465069630468, guid: e60030a3547b14d49a93c79dc7158f85, type: 3}
-      propertyPath: m_Mass
-      value: 100000
-      objectReference: {fileID: 0}
     - target: {fileID: 3760237465069630469, guid: e60030a3547b14d49a93c79dc7158f85, type: 3}
       propertyPath: player
       value: 
       objectReference: {fileID: 146534344}
-    - target: {fileID: 3760237465069630469, guid: e60030a3547b14d49a93c79dc7158f85, type: 3}
-      propertyPath: maxFrogSpawnAmount
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 3760237465069630469, guid: e60030a3547b14d49a93c79dc7158f85, type: 3}
-      propertyPath: spawnFrogsTime
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 3760237465069630469, guid: e60030a3547b14d49a93c79dc7158f85, type: 3}
-      propertyPath: minFrogSpawnAmount
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 3760237465069630470, guid: e60030a3547b14d49a93c79dc7158f85, type: 3}
       propertyPath: m_Name
       value: Plague Demon
-      objectReference: {fileID: 0}
-    - target: {fileID: 3760237465069630470, guid: e60030a3547b14d49a93c79dc7158f85, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3760237465069630470, guid: e60030a3547b14d49a93c79dc7158f85, type: 3}
-      propertyPath: m_Layer
-      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 3760237465069630472, guid: e60030a3547b14d49a93c79dc7158f85, type: 3}
       propertyPath: m_LocalPosition.x
