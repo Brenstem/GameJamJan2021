@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1497144910}
   - component: {fileID: 1497144909}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -65,7 +65,7 @@ GameObject:
   - component: {fileID: 924316912766653015}
   - component: {fileID: 924316912766653014}
   - component: {fileID: 2108325410}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Plague Frog
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,7 +101,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aggroRange: 17.74
   attackRange: 1
-  debug: 0
+  debug: 1
   biteHitBox: {fileID: 1497144908}
   biteCooldown: 1
 --- !u!195 &924316912766653015
@@ -209,6 +209,14 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: cd1eb8432db07ee4bbc7761ac4635469, type: 3}
       propertyPath: m_Name
       value: Frogboi
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: cd1eb8432db07ee4bbc7761ac4635469, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1254136283920374437, guid: cd1eb8432db07ee4bbc7761ac4635469, type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 2741630558544203594, guid: cd1eb8432db07ee4bbc7761ac4635469, type: 3}
       propertyPath: m_Materials.Array.data[0]
