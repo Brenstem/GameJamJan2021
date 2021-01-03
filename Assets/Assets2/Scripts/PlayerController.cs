@@ -5,7 +5,7 @@ using DanesUnityLibrary;
 
 public class PlayerController : MonoBehaviour
 {
-    public StateMachine<PlayerController> playerControllerStateMachine;
+    public StateMachine<PlayerController> stateMachine;
 
     public PlayerIdleState playerIdleState;
     public PlayerRunningState playerRunningState;
@@ -45,14 +45,15 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        playerControllerStateMachine = new StateMachine<PlayerController>(this);
+        stateMachine = new StateMachine<PlayerController>(this);
 
         playerIdleState = new PlayerIdleState();
         playerRunningState = new PlayerRunningState();
         playerJumpingState = new PlayerJumpingState();
         playerFallingState = new PlayerFallingState();
+        playerAttackingState = new PlayerAttackingState();
 
-        playerControllerStateMachine.ChangeState(playerIdleState);
+        stateMachine.ChangeState(playerIdleState);
 
 
         rb = GetComponent<Rigidbody>();
@@ -62,13 +63,13 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-
+        
     }
 
 
     void FixedUpdate()
     {
-        playerControllerStateMachine.Update();
+        stateMachine.Update();
     }
 
 
@@ -87,6 +88,17 @@ public class PlayerController : MonoBehaviour
         Gizmos.DrawWireSphere(groundCheckObject.transform.position, groundCheckRadius);
     }
 
+    public void Attack()
+    {
+        StartCoroutine(HitBoxActivationDelay(attackStartupTime));
+    }
+
+    IEnumerator HitBoxActivationDelay(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+
+        attackHitboxScript.ExposeHitBox();
+    }
 }
 
 public class PlayerIdleState : State<PlayerController>
@@ -113,26 +125,23 @@ public class PlayerIdleState : State<PlayerController>
 
         if (Input.GetKey(KeyCode.Space)/* || Input.GetKey(KeyCode.W)*/)
         {
-            owner.playerControllerStateMachine.ChangeState(owner.playerJumpingState);
+            owner.stateMachine.ChangeState(owner.playerJumpingState);
         }
         else if (groundCol.Length == 0)
         {
-            owner.playerControllerStateMachine.ChangeState(owner.playerFallingState);
+            owner.stateMachine.ChangeState(owner.playerFallingState);
         }
         else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
         {
-            owner.playerControllerStateMachine.ChangeState(owner.playerRunningState);
+            owner.stateMachine.ChangeState(owner.playerRunningState);
         }
-        else if ()
+        else if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-
+            owner.stateMachine.ChangeState(owner.playerAttackingState);
         }
 
         //slowdown
         owner.rb.velocity = Vector3.SmoothDamp(owner.rb.velocity, Vector2.zero, ref owner.zeroVector, owner.playerMovementSmoothingSlowDown);
-
-
-
     }
 }
 
@@ -157,20 +166,24 @@ public class PlayerRunningState : State<PlayerController>
 
         if (Input.GetKey(KeyCode.Space)/* || Input.GetKey(KeyCode.W)*/)
         {
-            owner.playerControllerStateMachine.ChangeState(owner.playerJumpingState);
+            owner.stateMachine.ChangeState(owner.playerJumpingState);
         }
         else if (groundCol.Length == 0)
         {
-            owner.playerControllerStateMachine.ChangeState(owner.playerFallingState);
+            owner.stateMachine.ChangeState(owner.playerFallingState);
         }
         else if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
         {
-            owner.playerControllerStateMachine.ChangeState(owner.playerIdleState);
+            owner.stateMachine.ChangeState(owner.playerIdleState);
+        }
+        else if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            owner.stateMachine.ChangeState(owner.playerAttackingState);
         }
 
 
         owner.moveX = Input.GetAxis("Horizontal");
-        
+
         owner.targetVelocity = new Vector3(owner.moveX * owner.runningMaxSpeed, 0f, 0f);
 
         RaycastHit hit;
@@ -181,7 +194,7 @@ public class PlayerRunningState : State<PlayerController>
 
 
         float angualDifferenc = Vector3.SignedAngle(hit.normal, Vector3.up, Vector3.forward);
-        
+
         //Debug.Log(angualDifferenc);
 
         //owner.targetVelocity = Quaternion.AngleAxis(angualDifferenc /** Mathf.Sign(owner.moveX)*/, Vector3.forward) * owner.targetVelocity;
@@ -192,7 +205,7 @@ public class PlayerRunningState : State<PlayerController>
         Debug.DrawRay(owner.transform.position, owner.targetVelocity, Color.green);
 
         //owner.rb.velocity = Vector3.SmoothDamp(owner.rb.velocity, owner.targetVelocity, ref owner.zeroVector, owner.playerMovementSmoothingAcceleration);
-        
+
         owner.rb.velocity = owner.targetVelocity;
 
         //Vector3 newVelocity = new Vector3(Mathf.Clamp(owner.rb.velocity.x + moveX * owner.runningAccelerationSpeed * Time.fixedDeltaTime, -owner.runningMaxSpeed, owner.runningMaxSpeed), 0, 0);
@@ -229,9 +242,10 @@ public class PlayerJumpingState : State<PlayerController>
         //{
         //    owner.playerControllerStateMachine.ChangeState(owner.playerIdleState);
         //}
-        /*else*/ if (jumpTimer.Expired || !Input.GetKey(KeyCode.Space))
+        /*else*/
+        if (jumpTimer.Expired || !Input.GetKey(KeyCode.Space))
         {
-            owner.playerControllerStateMachine.ChangeState(owner.playerFallingState);
+            owner.stateMachine.ChangeState(owner.playerFallingState);
         }
 
         owner.AirStrafe();
@@ -265,7 +279,7 @@ public class PlayerFallingState : State<PlayerController>
         Collider[] groundCol = Physics.OverlapSphere(owner.groundCheckObject.transform.position, owner.groundCheckRadius, owner.groundLayerMask);
         if (groundCol.Length >= 1)
         {
-            owner.playerControllerStateMachine.ChangeState(owner.playerIdleState);
+            owner.stateMachine.ChangeState(owner.playerIdleState);
         }
 
 
@@ -279,12 +293,13 @@ public class PlayerFallingState : State<PlayerController>
 
 public class PlayerAttackingState : State<PlayerController>
 {
-    Timer timer;
+    private Timer timer;
+
     public override void EnterState(PlayerController owner)
     {
-        Debug.Log("Attack");
-        owner.attackHitboxScript.ExposeHitBox();
         timer = new Timer(owner.attackTotalTime);
+
+        owner.Attack();
     }
 
     public override void ExitState(PlayerController owner)
@@ -294,18 +309,11 @@ public class PlayerAttackingState : State<PlayerController>
 
     public override void UpdateState(PlayerController owner)
     {
+        Debug.Log("Attack");
+
         timer.UpdateTimer(Time.fixedDeltaTime);
 
         if (timer.Expired)
-            owner.playerControllerStateMachine.ChangeState(owner.playerIdleState);
-        
-
-    }
-
-    IEnumerator HitBoxActivationDelay(PlayerController owner)
-    {
-        yield return owner.attackStartupTime;
-
-        owner.attackHitboxScript.ExposeHitBox();
+            owner.stateMachine.ChangeState(owner.playerIdleState);
     }
 }

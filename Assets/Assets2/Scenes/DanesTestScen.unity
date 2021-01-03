@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 2035111234}
-  m_IndirectSpecularColor: {r: 130.94983, g: 162.22717, b: 214.7164, a: 1}
+  m_IndirectSpecularColor: {r: 130.91873, g: 162.2846, b: 214.90045, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -467,11 +467,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 67e544fe51391df4ebf15fc99a6a84fc, type: 3}
---- !u!1 &1497144908 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1497144908, guid: 36d092eff09a1a8488472d5c2e3b82c1, type: 3}
-  m_PrefabInstance: {fileID: 924316912608559893}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1723385039 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3760237465069630472, guid: e60030a3547b14d49a93c79dc7158f85, type: 3}
@@ -840,49 +835,9 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1497144909, guid: 36d092eff09a1a8488472d5c2e3b82c1, type: 3}
-      propertyPath: debug
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1497144909, guid: 36d092eff09a1a8488472d5c2e3b82c1, type: 3}
-      propertyPath: showHitBox
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1497144909, guid: 36d092eff09a1a8488472d5c2e3b82c1, type: 3}
-      propertyPath: hitBoxExtents.x
-      value: 1.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 1497144909, guid: 36d092eff09a1a8488472d5c2e3b82c1, type: 3}
-      propertyPath: targetLayer.m_Bits
-      value: 2048
-      objectReference: {fileID: 0}
-    - target: {fileID: 924316912766652968, guid: 36d092eff09a1a8488472d5c2e3b82c1, type: 3}
-      propertyPath: player
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 924316912766652968, guid: 36d092eff09a1a8488472d5c2e3b82c1, type: 3}
-      propertyPath: biteHitBox
-      value: 
-      objectReference: {fileID: 1497144908}
-    - target: {fileID: 924316912766652968, guid: 36d092eff09a1a8488472d5c2e3b82c1, type: 3}
-      propertyPath: biteCooldown
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 924316912766652968, guid: 36d092eff09a1a8488472d5c2e3b82c1, type: 3}
-      propertyPath: debug
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 924316912766652968, guid: 36d092eff09a1a8488472d5c2e3b82c1, type: 3}
-      propertyPath: aggroRange
-      value: 17.74
-      objectReference: {fileID: 0}
     - target: {fileID: 924316912766652969, guid: 36d092eff09a1a8488472d5c2e3b82c1, type: 3}
       propertyPath: m_Name
       value: Plague Frog
-      objectReference: {fileID: 0}
-    - target: {fileID: 924316912766652969, guid: 36d092eff09a1a8488472d5c2e3b82c1, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 924316912766653012, guid: 36d092eff09a1a8488472d5c2e3b82c1, type: 3}
       propertyPath: m_LocalPosition.x
