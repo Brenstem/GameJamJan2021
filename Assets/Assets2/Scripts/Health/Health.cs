@@ -18,8 +18,12 @@ public class Health : MonoBehaviour
     [SerializeField] private float currentHealth;
     [SerializeField] public bool invulnerable;
 
+    [HideInInspector] public bool isDead;
+    private float currentHealth;
+
     void Start()
     {
+        isDead = false;
         currentHealth = startingHealth;
     }
 
@@ -41,5 +45,6 @@ public class Health : MonoBehaviour
     private void Die()
     {
         print("ded");
+        isDead = true;
     }
 }

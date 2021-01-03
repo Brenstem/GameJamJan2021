@@ -2,14 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using DanesUnityLibrary;
+
 
 public class BloodDemonController : MonoBehaviour
 {
-    [SerializeField] public Transform player;
+    [Header("Ranges")]
     [SerializeField] public float aggroRange;
     [SerializeField] public float attackRange;
+    [SerializeField] public float dashMultiplyer;
+
+    [Header("References and debug")]
+    [SerializeField] public Transform player;
     [SerializeField] private bool debug;
 
+    [Header("Attack")]
+    [SerializeField] private GameObject hitHitBox;
+    [SerializeField] public float hitCooldown;
+
+    [HideInInspector] public HitBoxController hitHitBoxController { get; private set; }
     [HideInInspector] public NavMeshAgent navigation { get; private set; }
 
     [HideInInspector] public StateMachine<BloodDemonController> stateMachine { get; private set; }
@@ -27,6 +38,7 @@ public class BloodDemonController : MonoBehaviour
 
     private void Start()
     {
+        hitHitBoxController = hitHitBox.GetComponent<HitBoxController>();
         navigation = GetComponent<NavMeshAgent>();
         stateMachine.ChangeState(idleState);
 
@@ -80,6 +92,7 @@ public class BloodDemonMove : State<BloodDemonController>
 {
     public override void EnterState(BloodDemonController owner)
     {
+        owner.navigation.enabled = true;
         owner.navigation.SetDestination(owner.player.position);
     }
 
@@ -89,6 +102,7 @@ public class BloodDemonMove : State<BloodDemonController>
 
     public override void UpdateState(BloodDemonController owner)
     {
+        owner.navigation.SetDestination(owner.player.position);
         if (Vector3.Distance(owner.transform.position, owner.player.position) < owner.attackRange)
         {
             owner.stateMachine.ChangeState(owner.attackState);
@@ -103,21 +117,48 @@ public class BloodDemonMove : State<BloodDemonController>
 
 public class BloodDemonAttack : State<BloodDemonController>
 {
+    Vector3 newVector = Vector3.zero;
+    private Timer dashTimer;
+    private Timer dashTimer2;
     public override void EnterState(BloodDemonController owner)
     {
-        Debug.Log("Attack!");
+        dashTimer = new Timer(owner.hitCooldown);
+        dashTimer2 = new Timer(owner.hitCooldown * 0.41f);
+        owner.hitHitBoxController.ExposeHitBox();
+        owner.GetComponent<Rigidbody>().isKinematic = false;
     }
 
     public override void ExitState(BloodDemonController owner)
     {
-
+        dashTimer.Reset();
+        dashTimer2.Reset();
     }
 
     public override void UpdateState(BloodDemonController owner)
     {
-        if (Vector3.Distance(owner.transform.position, owner.player.position) > owner.attackRange)
+		//dash back
+		if (!dashTimer.Expired)
         {
-            owner.stateMachine.ChangeState(owner.movementState);
+            owner.navigation.enabled = false;
+            newVector = owner.player.position - owner.transform.position;
+            owner.GetComponent<Rigidbody>().AddForce(-newVector * owner.dashMultiplyer); //den börjar använda gravity eftersom den inte ska snappa ner
+			if (dashTimer2.Expired)
+			{
+                owner.GetComponent<Rigidbody>().useGravity = true;
+			}
         }
+        else if (Vector3.Distance(owner.transform.position, owner.player.position) > owner.attackRange)
+        {
+            owner.GetComponent<Rigidbody>().useGravity = false;
+            owner.GetComponent<Rigidbody>().isKinematic = true;
+            owner.stateMachine.ChangeState(owner.idleState);
+        }
+		else
+		{
+            dashTimer.Reset();
+            dashTimer2.Reset();
+        }
+        dashTimer.UpdateTimer(Time.deltaTime);
+        dashTimer2.UpdateTimer(Time.deltaTime);
     }
 }
