@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DanesUnityLibrary;
 
 public class PlayerController : MonoBehaviour
 {
@@ -24,6 +25,12 @@ public class PlayerController : MonoBehaviour
     public GameObject groundCheckPosition;
     public float groundCheckRadius;
     public LayerMask groundLayerMask;
+
+    public float jumpSpeed;
+    public float jumpTime;
+
+    public float gravityScale;
+    public float terminalVelocity;
 
 
     private void Awake()
@@ -138,10 +145,12 @@ public class PlayerRunningState : State<PlayerController>
 public class PlayerJumpingState : State<PlayerController>
 {
     float moveX;
+    Timer jumpTimer;
 
     public override void EnterState(PlayerController owner)
     {
         Debug.Log("jumbi");
+        jumpTimer = new Timer(owner.jumpTime);
     }
 
     public override void ExitState(PlayerController owner)
@@ -152,14 +161,22 @@ public class PlayerJumpingState : State<PlayerController>
     public override void UpdateState(PlayerController owner)
     {
         Collider[] groundCol = Physics.OverlapSphere(owner.groundCheckPosition.transform.position, owner.groundCheckRadius, owner.groundLayerMask);
-        if (groundCol.Length == 0)
+        jumpTimer.UpdateTimer(Time.fixedDeltaTime);
+        if (groundCol.Length >= 1)
         {
             owner.playerControllerStateMachine.ChangeState(owner.playerIdleState);
+        }
+        else if (jumpTimer.Expired || !Input.GetKey(KeyCode.Space))
+        {
+            owner.playerControllerStateMachine.ChangeState(owner.playerFallingState);
         }
 
         moveX = Input.GetAxis("Horizontal");
         owner.targetVelocity = new Vector2(moveX * owner.runningMaxSpeed, owner.rb.velocity.y);
         owner.rb.velocity = Vector3.SmoothDamp(owner.rb.velocity, owner.targetVelocity, ref owner.zeroVector, owner.playerMovementSmoothingAcceleration);
+
+        owner.rb.velocity = new Vector3(owner.rb.velocity.x, owner.jumpSpeed, 0);
+
 
     }
 }
@@ -181,7 +198,7 @@ public class PlayerFallingState : State<PlayerController>
     public override void UpdateState(PlayerController owner)
     {
         Collider[] groundCol = Physics.OverlapSphere(owner.groundCheckPosition.transform.position, owner.groundCheckRadius, owner.groundLayerMask);
-        if (groundCol.Length == 0)
+        if (groundCol.Length >= 1)
         {
             owner.playerControllerStateMachine.ChangeState(owner.playerIdleState);
         }
@@ -190,5 +207,8 @@ public class PlayerFallingState : State<PlayerController>
         owner.targetVelocity = new Vector2(moveX * owner.runningMaxSpeed, owner.rb.velocity.y);
         owner.rb.velocity = Vector3.SmoothDamp(owner.rb.velocity, owner.targetVelocity, ref owner.zeroVector, owner.playerMovementSmoothingAcceleration);
 
+        owner.rb.velocity += new Vector3(0, -owner.gravityScale, 0);
+
+        owner.rb.velocity = new Vector3(owner.rb.velocity.x, Mathf.Clamp(owner.rb.velocity.y, -owner.terminalVelocity, Mathf.Infinity), 0);
     }
 }
