@@ -90,8 +90,9 @@ MonoBehaviour:
   lookingLeft: 0
   runningMaxSpeed: 17
   runningAccelerationSpeed: 150
-  playerMovementSmoothingAcceleration: 0.05
-  playerMovementSmoothingSlowDown: 0.118
+  playerMovementGroundedAccelerationSmoothing: 0.05
+  playerMovementGroundedSlowDownSmoothing: 0.118
+  playerMovementAirborneAccelerationSmoothing: 0.2
   groundCheckObject: {fileID: 1743918066530289611}
   groundCheckRadius: 0.47
   groundLayerMask:
