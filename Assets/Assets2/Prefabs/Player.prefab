@@ -83,12 +83,12 @@ MonoBehaviour:
   attackHitboxObject: {fileID: 4396627474647051556}
   attackHitboxScript: {fileID: 0}
   attackStartupTime: 0.1
-  attackTotalTime: 0.5
+  attackTotalTime: 0.3
   rb: {fileID: 0}
   targetVelocity: {x: 0, y: 0, z: 0}
   zeroVector: {x: 0, y: 0, z: 0}
   moveX: 0
-  runningMaxSpeed: 22
+  runningMaxSpeed: 17
   runningAccelerationSpeed: 150
   playerMovementSmoothingAcceleration: 0.05
   playerMovementSmoothingSlowDown: 0.118
@@ -113,9 +113,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edbf246d0b9a7294a8dd231779dbf7b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 100
+  startingHealth: 200
   currentHealth: 0
   invulnerable: 0
+  hurtParticle: {fileID: 5688848039972580233, guid: d17837526fb04064eacceb017e85b7a6, type: 3}
   isDead: 0
 --- !u!1 &1743918065973096672
 GameObject:
@@ -349,11 +350,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5920122957727308709, guid: 67e544fe51391df4ebf15fc99a6a84fc, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.28
+      value: 1.65
       objectReference: {fileID: 0}
     - target: {fileID: 5920122957727308709, guid: 67e544fe51391df4ebf15fc99a6a84fc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.84
+      value: -0.52
       objectReference: {fileID: 0}
     - target: {fileID: 5920122957727308709, guid: 67e544fe51391df4ebf15fc99a6a84fc, type: 3}
       propertyPath: m_LocalPosition.z
@@ -401,7 +402,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7166069421539419395, guid: 67e544fe51391df4ebf15fc99a6a84fc, type: 3}
       propertyPath: hitBoxExtents.x
-      value: 2.02
+      value: 2.22
       objectReference: {fileID: 0}
     - target: {fileID: 7166069421539419395, guid: 67e544fe51391df4ebf15fc99a6a84fc, type: 3}
       propertyPath: hitBoxExtents.y
@@ -413,7 +414,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7166069421539419395, guid: 67e544fe51391df4ebf15fc99a6a84fc, type: 3}
       propertyPath: lifeTime
-      value: 0.3
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7166069421539419395, guid: 67e544fe51391df4ebf15fc99a6a84fc, type: 3}
+      propertyPath: damage
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 67e544fe51391df4ebf15fc99a6a84fc, type: 3}
