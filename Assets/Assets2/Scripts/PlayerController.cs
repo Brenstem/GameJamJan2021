@@ -62,16 +62,13 @@ public class PlayerController : MonoBehaviour
     }
 
     void Start()
-    {
-        
+    {   
     }
-
 
     void FixedUpdate()
     {
         stateMachine.Update();
     }
-
 
     public void AirStrafe()
     {
@@ -87,25 +84,13 @@ public class PlayerController : MonoBehaviour
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(groundCheckObject.transform.position, groundCheckRadius);
     }
-
-    public void Attack()
-    {
-        StartCoroutine(HitBoxActivationDelay(attackStartupTime));
-    }
-
-    IEnumerator HitBoxActivationDelay(float waitTime)
-    {
-        yield return new WaitForSeconds(waitTime);
-
-        attackHitboxScript.ExposeHitBox();
-    }
 }
 
 public class PlayerIdleState : State<PlayerController>
 {
     public override void EnterState(PlayerController owner)
     {
-        //Debug.Log("idle");
+        Debug.Log("idle");
     }
 
     public override void ExitState(PlayerController owner)
@@ -123,7 +108,7 @@ public class PlayerIdleState : State<PlayerController>
 
         Collider[] groundCol = Physics.OverlapSphere(owner.groundCheckObject.transform.position, owner.groundCheckRadius, owner.groundLayerMask);
 
-        if (Input.GetKey(KeyCode.Space)/* || Input.GetKey(KeyCode.W)*/)
+        if (Input.GetKey(KeyCode.Space))
         {
             owner.stateMachine.ChangeState(owner.playerJumpingState);
         }
@@ -135,7 +120,7 @@ public class PlayerIdleState : State<PlayerController>
         {
             owner.stateMachine.ChangeState(owner.playerRunningState);
         }
-        else if (Input.GetKeyDown(KeyCode.Mouse0))
+        else if (Input.GetKey(KeyCode.Mouse0))
         {
             owner.stateMachine.ChangeState(owner.playerAttackingState);
         }
@@ -149,7 +134,7 @@ public class PlayerRunningState : State<PlayerController>
 {
     public override void EnterState(PlayerController owner)
     {
-        //Debug.Log("shmoovin");
+        Debug.Log("shmoovin");
     }
 
     public override void ExitState(PlayerController owner)
@@ -164,7 +149,7 @@ public class PlayerRunningState : State<PlayerController>
 
         Collider[] groundCol = Physics.OverlapSphere(owner.groundCheckObject.transform.position, owner.groundCheckRadius, owner.groundLayerMask);
 
-        if (Input.GetKey(KeyCode.Space)/* || Input.GetKey(KeyCode.W)*/)
+        if (Input.GetKey(KeyCode.Space))
         {
             owner.stateMachine.ChangeState(owner.playerJumpingState);
         }
@@ -183,7 +168,6 @@ public class PlayerRunningState : State<PlayerController>
 
 
         owner.moveX = Input.GetAxis("Horizontal");
-
         owner.targetVelocity = new Vector3(owner.moveX * owner.runningMaxSpeed, 0f, 0f);
 
         RaycastHit hit;
@@ -204,9 +188,9 @@ public class PlayerRunningState : State<PlayerController>
 
         Debug.DrawRay(owner.transform.position, owner.targetVelocity, Color.green);
 
-        //owner.rb.velocity = Vector3.SmoothDamp(owner.rb.velocity, owner.targetVelocity, ref owner.zeroVector, owner.playerMovementSmoothingAcceleration);
+        owner.rb.velocity = Vector3.SmoothDamp(owner.rb.velocity, owner.targetVelocity, ref owner.zeroVector, owner.playerMovementSmoothingAcceleration);
 
-        owner.rb.velocity = owner.targetVelocity;
+        //owner.rb.velocity = owner.targetVelocity;
 
         //Vector3 newVelocity = new Vector3(Mathf.Clamp(owner.rb.velocity.x + moveX * owner.runningAccelerationSpeed * Time.fixedDeltaTime, -owner.runningMaxSpeed, owner.runningMaxSpeed), 0, 0);
         //newVelocity = Vector3.ClampMagnitude(newVelocity, owner.runningMaxSpeed);
@@ -223,7 +207,7 @@ public class PlayerJumpingState : State<PlayerController>
 
     public override void EnterState(PlayerController owner)
     {
-        //Debug.Log("jumbi");
+        Debug.Log("jumbi");
         jumpTimer = new Timer(owner.jumpTime);
     }
 
@@ -260,7 +244,7 @@ public class PlayerFallingState : State<PlayerController>
     public override void EnterState(PlayerController owner)
     {
         //Debug.LogWarning("-----------------falling-----------------");
-        //Debug.Log("falling");
+        Debug.Log("falling");
     }
 
     public override void ExitState(PlayerController owner)
@@ -299,21 +283,33 @@ public class PlayerAttackingState : State<PlayerController>
     {
         timer = new Timer(owner.attackTotalTime);
 
-        owner.Attack();
+        Debug.Log("Attack Start");
+        
+        owner.attackHitboxScript.ExposeHitBox();
+
+        //owner.StartCoroutine(HitBoxActivationDelay(owner));
     }
 
     public override void ExitState(PlayerController owner)
     {
-
+        Debug.Log("Attack Done");
     }
 
     public override void UpdateState(PlayerController owner)
     {
-        Debug.Log("Attack");
 
         timer.UpdateTimer(Time.fixedDeltaTime);
 
         if (timer.Expired)
+        {
             owner.stateMachine.ChangeState(owner.playerIdleState);
+        }
+    }
+
+    IEnumerator HitBoxActivationDelay(PlayerController owner)
+    {
+        yield return new WaitForSeconds(owner.attackTotalTime);
+
+        owner.attackHitboxScript.ExposeHitBox();
     }
 }
