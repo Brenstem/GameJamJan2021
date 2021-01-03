@@ -105,6 +105,8 @@ public class PlagueDemonMove : State<PlagueDemonController>
 
     public override void UpdateState(PlagueDemonController owner)
     {
+        owner.navigation.SetDestination(owner.player.position);
+
         spawnFrogsTimer.UpdateTimer(Time.deltaTime);
 
         if (Vector3.Distance(owner.transform.position, owner.player.transform.position) < owner.stoppingRange)
@@ -114,6 +116,10 @@ public class PlagueDemonMove : State<PlagueDemonController>
             if (spawnFrogsTimer.Expired)
                 owner.stateMachine.ChangeState(owner.spawnAttack);
         }
+        /*else if (Vector3.Distance(owner.transform.position, owner.player.position) >)
+        {
+
+        }*/
     }
 }
 

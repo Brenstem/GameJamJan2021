@@ -13,7 +13,7 @@ public class PlagueFrogController : MonoBehaviour
 
     [Header("References and debug")]
     [SerializeField] private bool debug;
-    public Transform player { get; private set; }
+    [SerializeField] public Transform player;
 
     [Header("Attack")]
     [SerializeField] private GameObject biteHitBox;
@@ -93,7 +93,7 @@ public class PlagueFrogMove : State<PlagueFrogController>
 {
     public override void EnterState(PlagueFrogController owner)
     {
-        owner.navigation.SetDestination(owner.player.position);
+        owner.navigation.SetDestination(new Vector3(owner.player.position.x, 0));
     }
 
     public override void ExitState(PlagueFrogController owner)
@@ -102,7 +102,8 @@ public class PlagueFrogMove : State<PlagueFrogController>
 
     public override void UpdateState(PlagueFrogController owner)
     {
-        owner.navigation.SetDestination(owner.player.position);
+        owner.navigation.SetDestination(new Vector3(owner.player.position.x, 0));
+
 
         if (Vector3.Distance(owner.transform.position, owner.player.position) < owner.attackRange)
         {

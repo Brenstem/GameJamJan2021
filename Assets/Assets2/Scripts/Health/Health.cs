@@ -18,6 +18,8 @@ public class Health : MonoBehaviour
     [SerializeField] private float currentHealth;
     [SerializeField] public bool invulnerable;
 
+    [SerializeField] private GameObject hurtParticle;
+
     [HideInInspector] public bool isDead;
     //private float currentHealth;
 
@@ -33,6 +35,8 @@ public class Health : MonoBehaviour
         {
             TookDamage?.Invoke(debuff);
 
+            Instantiate(hurtParticle, transform.position, transform.rotation);
+
             currentHealth -= damageVal;
 
             if (currentHealth <= 0)
@@ -45,6 +49,8 @@ public class Health : MonoBehaviour
     private void Die()
     {
         print("ded");
+
+        Destroy(this.gameObject);
         isDead = true;
     }
 }
