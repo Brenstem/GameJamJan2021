@@ -3,16 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using DanesUnityLibrary;
 
 public class PlagueFrogController : MonoBehaviour
 {
-    [SerializeField] public Transform player;
+    [Header("Ranges")]
     [SerializeField] public float aggroRange;
     [SerializeField] public float attackRange;
+
+    [Header("References and debug")]
+    [SerializeField] public Transform player;
     [SerializeField] private bool debug;
 
-    [SerializeField] private GameObject hitBox;
-    public HitBoxController hitBoxController { get; private set; }
+    [Header("Attack")]
+    [SerializeField] private GameObject biteHitBox;
+    [SerializeField] public float biteCooldown;
+
+
+    [HideInInspector] public HitBoxController biteHitBoxController { get; private set; }
 
     [HideInInspector] public NavMeshAgent navigation { get; private set; }
 
@@ -31,7 +39,7 @@ public class PlagueFrogController : MonoBehaviour
 
     private void Start()
     {
-        hitBoxController = hitBox.GetComponent<HitBoxController>();
+        biteHitBoxController = biteHitBox.GetComponent<HitBoxController>();
         navigation = GetComponent<NavMeshAgent>();
         stateMachine.ChangeState(idleState);
 
@@ -108,21 +116,33 @@ public class PlagueFrogMove : State<PlagueFrogController>
 
 public class PlagueFrogAttack : State<PlagueFrogController>
 {
+    private Timer attackTimer;
+
     public override void EnterState(PlagueFrogController owner)
     {
         Debug.Log("Attack!");
-        owner.hitBoxController.ExposeHitBox();
+        owner.biteHitBoxController.ExposeHitBox();
+        attackTimer = new Timer(owner.biteCooldown);
     }
 
     public override void ExitState(PlagueFrogController owner)
     {
+        attackTimer.Reset();
     }
 
     public override void UpdateState(PlagueFrogController owner)
     {
+        attackTimer.UpdateTimer(Time.deltaTime);
+
         if (Vector3.Distance(owner.transform.position, owner.player.position) > owner.attackRange)
         {
             owner.stateMachine.ChangeState(owner.movementState);
+        }
+        else if (attackTimer.Expired)
+        {
+            Debug.Log("Attack!");
+            owner.biteHitBoxController.ExposeHitBox();
+            attackTimer.Reset();
         }
     }
 }

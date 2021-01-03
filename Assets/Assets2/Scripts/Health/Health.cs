@@ -5,7 +5,6 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
     [SerializeField] private float startingHealth;
-    [SerializeField] private bool player;
 
     private float currentHealth;
 

@@ -13,8 +13,10 @@ public class HitBoxController : MonoBehaviour
 
     [Header("Debug")]
     [SerializeField] private bool debug;
+    [SerializeField] private bool showHitBox;
 
     private Timer hitBoxTimer;
+    private bool doneDamage;
 
     private void Start()
     {
@@ -23,11 +25,12 @@ public class HitBoxController : MonoBehaviour
 
     private void Update()
     {
-        print(hitBoxTimer.Expired);
+        hitBoxTimer.UpdateTimer(Time.deltaTime);
 
-        if (!hitBoxTimer.Expired)
+        if (!hitBoxTimer.Expired && !doneDamage)
         {
-            debug = true;
+            if (debug)
+                showHitBox = true;
 
             Collider[] hits = Physics.OverlapBox(transform.position, hitBoxExtents);
 
@@ -36,12 +39,16 @@ public class HitBoxController : MonoBehaviour
                 if (col.GetComponent<Health>() == true)
                 {
                     col.GetComponent<Health>().Damage(damage);
+                    doneDamage = true;
                 }
             }
         }
         else if (hitBoxTimer.Expired)
         {
-            debug = false;
+            if (debug)
+                showHitBox = false;
+
+            doneDamage = false;
         }
     }
 
@@ -52,7 +59,7 @@ public class HitBoxController : MonoBehaviour
 
     public void OnDrawGizmos()
     {
-        if (debug)
+        if (showHitBox)
         {
             Gizmos.color = Color.red;
             Gizmos.DrawWireCube(transform.position, hitBoxExtents);

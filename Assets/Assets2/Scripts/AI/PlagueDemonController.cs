@@ -119,8 +119,6 @@ public class PlagueDemonMove : State<PlagueDemonController>
 
 public class PlaugeDemonSpawn : State<PlagueDemonController>
 {
-
-
     public override void EnterState(PlagueDemonController owner)
     {
         owner.SpawnPlagueFrogs(Random.Range(owner.minFrogSpawnAmount, owner.maxFrogSpawnAmount));

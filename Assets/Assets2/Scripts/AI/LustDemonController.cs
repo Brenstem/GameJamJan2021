@@ -2,12 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using DanesUnityLibrary;
 
 public class LustDemonController : MonoBehaviour
 {
-    [SerializeField] public Transform player;
+    [Header("Ranges")]
     [SerializeField] public float aggroRange;
     [SerializeField] public float attackRange;
+
+    [Header("Whip attack")]
+    [SerializeField] private GameObject whipHitBox;
+    [SerializeField] public float whipCooldown;
+
+    [HideInInspector] public HitBoxController whipHitBoxController;
+    
+    [Header("References and debug")]
+    [SerializeField] public Transform player;
     [SerializeField] private bool debug;
 
     [HideInInspector] public NavMeshAgent navigation { get; private set; }
@@ -29,6 +39,8 @@ public class LustDemonController : MonoBehaviour
     {
         navigation = GetComponent<NavMeshAgent>();
         stateMachine.ChangeState(idleState);
+
+        whipHitBoxController = whipHitBox.GetComponent<HitBoxController>();
 
         if (player == null)
         {
@@ -103,21 +115,33 @@ public class LustDemonMove : State<LustDemonController>
 
 public class LustDemonAttack : State<LustDemonController>
 {
+    private Timer attackTimer;
+
     public override void EnterState(LustDemonController owner)
     {
         Debug.Log("Attack!");
+        owner.whipHitBoxController.ExposeHitBox();
+        attackTimer = new Timer(owner.whipCooldown);
     }
 
     public override void ExitState(LustDemonController owner)
     {
-
+        attackTimer.Reset();
     }
 
     public override void UpdateState(LustDemonController owner)
     {
+        attackTimer.UpdateTimer(Time.deltaTime);
+
         if (Vector3.Distance(owner.transform.position, owner.player.position) > owner.attackRange)
         {
             owner.stateMachine.ChangeState(owner.movementState);
+        }
+        else if (attackTimer.Expired)
+        {
+            Debug.Log("Attack!");
+            owner.whipHitBoxController.ExposeHitBox();
+            attackTimer.Reset();
         }
     }
 }
