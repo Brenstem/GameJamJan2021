@@ -12,13 +12,23 @@ public class PlayerController : MonoBehaviour
     public PlayerJumpingState playerJumpingState;
     public PlayerFallingState playerFallingState;
 
-    public float runningMaxSpeed;
-    public float runningAccelerationSpeed;
+    public PlayerAttackingState playerAttackingState;
 
+    public GameObject attackHitboxObject;
+    [HideInInspector] public HitBoxController attackHitboxScript;
+
+    public float attackStartupTime;
+    public float attackTotalTime;
+
+
+    #region Movement Vars
     [HideInInspector] public Rigidbody rb;
     [HideInInspector] public Vector3 targetVelocity;
     [HideInInspector] public Vector3 zeroVector = Vector3.zero;
+    [HideInInspector] public float moveX;
 
+    public float runningMaxSpeed;
+    public float runningAccelerationSpeed;
     [Range(0, .3f)] public float playerMovementSmoothingAcceleration = .05f;
     [Range(0, .3f)] public float playerMovementSmoothingSlowDown = .05f;
 
@@ -31,7 +41,7 @@ public class PlayerController : MonoBehaviour
 
     public float gravityScale;
     public float terminalVelocity;
-    [HideInInspector] public float moveX;
+    #endregion
 
     private void Awake()
     {
@@ -44,8 +54,10 @@ public class PlayerController : MonoBehaviour
 
         playerControllerStateMachine.ChangeState(playerIdleState);
 
+
         rb = GetComponent<Rigidbody>();
 
+        attackHitboxScript = attackHitboxObject.GetComponent<HitBoxController>();
     }
 
     void Start()
@@ -110,6 +122,10 @@ public class PlayerIdleState : State<PlayerController>
         else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
         {
             owner.playerControllerStateMachine.ChangeState(owner.playerRunningState);
+        }
+        else if ()
+        {
+
         }
 
         //slowdown
@@ -258,5 +274,38 @@ public class PlayerFallingState : State<PlayerController>
         //gravity 
         owner.rb.velocity += new Vector3(0, -owner.gravityScale, 0);
         owner.rb.velocity = new Vector3(owner.rb.velocity.x, Mathf.Clamp(owner.rb.velocity.y, -owner.terminalVelocity, Mathf.Infinity), 0);
+    }
+}
+
+public class PlayerAttackingState : State<PlayerController>
+{
+    Timer timer;
+    public override void EnterState(PlayerController owner)
+    {
+        Debug.Log("Attack");
+        owner.attackHitboxScript.ExposeHitBox();
+        timer = new Timer(owner.attackTotalTime);
+    }
+
+    public override void ExitState(PlayerController owner)
+    {
+
+    }
+
+    public override void UpdateState(PlayerController owner)
+    {
+        timer.UpdateTimer(Time.fixedDeltaTime);
+
+        if (timer.Expired)
+            owner.playerControllerStateMachine.ChangeState(owner.playerIdleState);
+        
+
+    }
+
+    IEnumerator HitBoxActivationDelay(PlayerController owner)
+    {
+        yield return owner.attackStartupTime;
+
+        owner.attackHitboxScript.ExposeHitBox();
     }
 }
