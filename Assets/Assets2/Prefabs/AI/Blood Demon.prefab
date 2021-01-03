@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 5169855263580736084}
   - component: {fileID: 5169855263580736083}
   - component: {fileID: 5169855263580736082}
-  - component: {fileID: 5169855263580736081}
   - component: {fileID: 5169855263580736080}
+  - component: {fileID: 3352386306570550243}
   m_Layer: 0
   m_Name: Blood Demon
   m_TagString: Untagged
@@ -98,22 +98,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5169855263580736081
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5169855263580736079}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5063cc6a0bf7bd94ebb67daea321bbf3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  aggroRange: 20
-  attackRange: 3
-  debug: 1
 --- !u!195 &5169855263580736080
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -136,3 +120,19 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &3352386306570550243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5169855263580736079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d882db9bb28d1e54a8872d8324ebe43f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  aggroRange: 15
+  attackRange: 2.5
+  debug: 1

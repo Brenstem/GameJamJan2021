@@ -27,7 +27,6 @@ public class PlagueDemonController : MonoBehaviour
     [HideInInspector] public PlagueDemonMove movementState { get; private set; }
     [HideInInspector] public PlaugeDemonSpawn spawnAttack { get; private set; }
 
-
     private void Awake()
     {
         stateMachine = new StateMachine<PlagueDemonController>(this);

@@ -1,37 +1,34 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class PlagueFrogController : MonoBehaviour
+public class IceDemonController : MonoBehaviour
 {
     [SerializeField] public Transform player;
     [SerializeField] public float aggroRange;
     [SerializeField] public float attackRange;
     [SerializeField] private bool debug;
 
-    [SerializeField] private GameObject hitBox;
-    public HitBoxController hitBoxController { get; private set; }
-
     [HideInInspector] public NavMeshAgent navigation { get; private set; }
 
-    [HideInInspector] public StateMachine<PlagueFrogController> stateMachine { get; private set; }
-    [HideInInspector] public PlagueFrogIdle idleState { get; private set; }
-    [HideInInspector] public PlagueFrogMove movementState { get; private set; }
-    [HideInInspector] public PlagueFrogAttack attackState { get; private set; }
+    [HideInInspector] public StateMachine<IceDemonController> stateMachine { get; private set; }
+    [HideInInspector] public IceDemonIdle idleState { get; private set; }
+    [HideInInspector] public IceDemonMove movementState { get; private set; }
+    [HideInInspector] public IceDemonAttack attackState { get; private set; }
+    [HideInInspector] public IceDemonShield shieldState { get; private set; }
 
     private void Awake()
     {
-        stateMachine = new StateMachine<PlagueFrogController>(this);
-        idleState = new PlagueFrogIdle();
-        movementState = new PlagueFrogMove();
-        attackState = new PlagueFrogAttack();
+        stateMachine = new StateMachine<IceDemonController>(this);
+        idleState = new IceDemonIdle();
+        movementState = new IceDemonMove();
+        attackState = new IceDemonAttack();
+        shieldState = new IceDemonShield();
     }
 
     private void Start()
     {
-        hitBoxController = hitBox.GetComponent<HitBoxController>();
         navigation = GetComponent<NavMeshAgent>();
         stateMachine.ChangeState(idleState);
 
@@ -62,17 +59,17 @@ public class PlagueFrogController : MonoBehaviour
     }
 }
 
-public class PlagueFrogIdle : State<PlagueFrogController>
+public class IceDemonIdle : State<IceDemonController>
 {
-    public override void EnterState(PlagueFrogController owner)
+    public override void EnterState(IceDemonController owner)
     {
     }
 
-    public override void ExitState(PlagueFrogController owner)
+    public override void ExitState(IceDemonController owner)
     {
     }
 
-    public override void UpdateState(PlagueFrogController owner)
+    public override void UpdateState(IceDemonController owner)
     {
         if (Vector3.Distance(owner.transform.position, owner.player.position) < owner.aggroRange)
         {
@@ -81,18 +78,18 @@ public class PlagueFrogIdle : State<PlagueFrogController>
     }
 }
 
-public class PlagueFrogMove : State<PlagueFrogController>
+public class IceDemonMove : State<IceDemonController>
 {
-    public override void EnterState(PlagueFrogController owner)
+    public override void EnterState(IceDemonController owner)
     {
         owner.navigation.SetDestination(owner.player.position);
     }
 
-    public override void ExitState(PlagueFrogController owner)
+    public override void ExitState(IceDemonController owner)
     {
     }
 
-    public override void UpdateState(PlagueFrogController owner)
+    public override void UpdateState(IceDemonController owner)
     {
         if (Vector3.Distance(owner.transform.position, owner.player.position) < owner.attackRange)
         {
@@ -106,19 +103,35 @@ public class PlagueFrogMove : State<PlagueFrogController>
     }
 }
 
-public class PlagueFrogAttack : State<PlagueFrogController>
+public class IceDemonShield : State<IceDemonController>
 {
-    public override void EnterState(PlagueFrogController owner)
+    public override void EnterState(IceDemonController owner)
+    {
+        Debug.Log("Shield!");
+    }
+
+    public override void ExitState(IceDemonController owner)
+    {
+    }
+
+    public override void UpdateState(IceDemonController owner)
+    {
+    }
+}
+
+public class IceDemonAttack : State<IceDemonController>
+{
+    public override void EnterState(IceDemonController owner)
     {
         Debug.Log("Attack!");
-        owner.hitBoxController.ExposeHitBox();
     }
 
-    public override void ExitState(PlagueFrogController owner)
+    public override void ExitState(IceDemonController owner)
     {
+
     }
 
-    public override void UpdateState(PlagueFrogController owner)
+    public override void UpdateState(IceDemonController owner)
     {
         if (Vector3.Distance(owner.transform.position, owner.player.position) > owner.attackRange)
         {
@@ -126,5 +139,3 @@ public class PlagueFrogAttack : State<PlagueFrogController>
         }
     }
 }
-
-
