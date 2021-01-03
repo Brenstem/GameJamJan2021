@@ -12,8 +12,8 @@ public class PlagueFrogController : MonoBehaviour
     [SerializeField] public float attackRange;
 
     [Header("References and debug")]
-    [SerializeField] public Transform player;
     [SerializeField] private bool debug;
+    public Transform player { get; private set; }
 
     [Header("Attack")]
     [SerializeField] private GameObject biteHitBox;
