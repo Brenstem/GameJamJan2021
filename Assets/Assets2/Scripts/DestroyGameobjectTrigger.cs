@@ -6,12 +6,12 @@ public class DestroyGameobjectTrigger : MonoBehaviour
 {
 	private void OnTriggerEnter(Collider other)
 	{
-		if (other.transform.parent.gameObject != null)
+		if (other.transform.gameObject != null)
 		{
-			if (other.transform.parent.gameObject.CompareTag("Player"))
+			if (other.transform.gameObject.CompareTag("Player"))
 				other.GetComponentInParent<Health>().Damage(1000);
 			else
-				Destroy(other.transform.parent.gameObject);
+				Destroy(other.transform.gameObject);
 		}
 		else
 			Destroy(other);

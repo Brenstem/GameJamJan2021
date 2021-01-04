@@ -304,6 +304,8 @@ public class PlayerAttackingState : State<PlayerController>
     {
         //Debug.Log("Attack");
 
+        owner.animator.SetTrigger("Punch");
+
         timer = new Timer(owner.attackTotalTime);
         owner.StartCoroutine(HitBoxActivationDelay(owner));
     }

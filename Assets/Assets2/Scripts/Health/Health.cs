@@ -57,9 +57,14 @@ public class Health : MonoBehaviour
 
     private void Die()
     {
-        print("ded");
-
-        Destroy(this.gameObject);
-        isDead = true;
+        if (gameObject.CompareTag("Player"))
+        {
+            print("ded");
+            isDead = true;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 }
